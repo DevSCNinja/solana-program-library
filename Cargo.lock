@@ -2850,8 +2850,9 @@ dependencies = [
 
 [[package]]
 name = "serum_dex"
-version = "0.2.0"
-source = "git+https://github.com/project-serum/serum-dex?rev=991a86e#991a86e93c22667b6b0fbb01914395d332be5531"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5614c9e8e72610b17a51f024da2634a03252581689a2efda061190797372c2ef"
 dependencies = [
  "arrayref",
  "bincode",
