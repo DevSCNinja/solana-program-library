@@ -18,9 +18,15 @@ use std::str::FromStr;
 
 // -------- UPDATE START -------
 const KEYPAIR_PATH: &str = "/your/path";
-const SRM_TOKEN_ACCOUNT: &str = "BASE58_ADDRESS";
-const USDC_TOKEN_ACCOUNT: &str = "BASE58_ADDRESS";
+
+const QUOTE_TOKEN_ACCOUNT: &str = "BASE58_ADDRESS";
 const WRAPPED_SOL_TOKEN_ACCOUNT: &str = "BASE58_ADDRESS";
+const SRM_TOKEN_ACCOUNT: &str = "BASE58_ADDRESS";
+
+const QUOTE_TOKEN_MINT: &str = "BASE58_ADDRESS";     // USDC: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+const SOL_QUOTE_DEX_MARKET: &str = "BASE58_ADDRESS"; // USDC: 9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT
+const SRM_QUOTE_DEX_MARKET: &str = "BASE58_ADDRESS"; // USDC: ByRys5tuUWDgL73G8JBAEfkdFf8JWBzPBDHsBVQ5vbQA
+
 solana_program::declare_id!("TokenLend1ng1111111111111111111111111111111");
 // -------- UPDATE END ---------
 
@@ -30,28 +36,30 @@ pub struct DexMarket {
 }
 
 pub fn main() {
-    let mut client = RpcClient::new("https://api.mainnet-beta.solana.com".to_owned());
+    let mut client = RpcClient::new("https://devnet.solana.com".to_owned());
 
     let payer = read_keypair_file(&format!("{}/payer.json", KEYPAIR_PATH)).unwrap();
-    let usdc_mint_pubkey =
-        Pubkey::from_str("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v").unwrap();
 
-    let sol_usdc_dex_market = DexMarket {
-        name: "sol_usdc",
-        pubkey: Pubkey::from_str("9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT").unwrap(),
+    let quote_token_mint =
+        Pubkey::from_str(QUOTE_TOKEN_MINT).unwrap();
+
+    let sol_quote_dex_market = DexMarket {
+        name: "sol_quote",
+        pubkey: Pubkey::from_str(SOL_QUOTE_DEX_MARKET).unwrap(),
     };
 
-    let srm_usdc_dex_market = DexMarket {
-        name: "srm_usdc",
-        pubkey: Pubkey::from_str("ByRys5tuUWDgL73G8JBAEfkdFf8JWBzPBDHsBVQ5vbQA").unwrap(),
+    let srm_quote_dex_market = DexMarket {
+        name: "srm_quote",
+        pubkey: Pubkey::from_str(SRM_QUOTE_DEX_MARKET).unwrap(),
     };
 
-    let quote_token_mint = usdc_mint_pubkey;
     let (lending_market_owner, lending_market_pubkey, _lending_market) =
         create_lending_market(&mut client, quote_token_mint, &payer);
 
-    let usdc_liquidity_source = Pubkey::from_str(USDC_TOKEN_ACCOUNT).unwrap();
-    let usdc_reserve_config = ReserveConfig {
+    println!("Created lending market with pubkey: {}", lending_market_pubkey);
+
+    let quote_liquidity_source = Pubkey::from_str(QUOTE_TOKEN_ACCOUNT).unwrap();
+    let quote_reserve_config = ReserveConfig {
         optimal_utilization_rate: 80,
         loan_to_value_ratio: 75,
         liquidation_bonus: 5,
@@ -65,17 +73,17 @@ pub fn main() {
         },
     };
 
-    let (usdc_reserve_pubkey, _usdc_reserve) = create_reserve(
+    let (quote_reserve_pubkey, _quote_reserve) = create_reserve(
         &mut client,
-        usdc_reserve_config,
+        quote_reserve_config,
         lending_market_pubkey,
         &lending_market_owner,
         None,
-        usdc_liquidity_source,
+        quote_liquidity_source,
         &payer,
     );
 
-    println!("Created usdc reserve with pubkey: {}", usdc_reserve_pubkey);
+    println!("Created quote reserve with pubkey: {}", quote_reserve_pubkey);
 
     let sol_liquidity_source = Pubkey::from_str(WRAPPED_SOL_TOKEN_ACCOUNT).unwrap();
     let sol_reserve_config = ReserveConfig {
@@ -97,7 +105,7 @@ pub fn main() {
         sol_reserve_config,
         lending_market_pubkey,
         &lending_market_owner,
-        Some(sol_usdc_dex_market.pubkey),
+        Some(sol_quote_dex_market.pubkey),
         sol_liquidity_source,
         &payer,
     );
@@ -124,7 +132,7 @@ pub fn main() {
         srm_reserve_config,
         lending_market_pubkey,
         &lending_market_owner,
-        Some(srm_usdc_dex_market.pubkey),
+        Some(srm_quote_dex_market.pubkey),
         srm_liquidity_source,
         &payer,
     );
