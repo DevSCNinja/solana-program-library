@@ -277,15 +277,17 @@ const ASKS_OFFSET: usize = 39;
 
 /// Dex market info
 pub struct DexMarket {
-    bids: Pubkey,
-    asks: Pubkey,
+    /// Bids
+    pub bids: Pubkey,
+    /// Asks
+    pub asks: Pubkey,
     base_lots: u64,
     quote_lots: u64,
 }
 
 impl DexMarket {
     /// Create a new DexMarket
-    fn new(dex_market_info: &AccountInfo) -> Self {
+    pub fn new(dex_market_info: &AccountInfo) -> Self {
         let dex_market_data = dex_market_info.data.borrow();
         let bids = Self::pubkey_at_offset(&dex_market_data, BIDS_OFFSET);
         let asks = Self::pubkey_at_offset(&dex_market_data, ASKS_OFFSET);
