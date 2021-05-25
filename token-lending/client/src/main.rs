@@ -19,15 +19,32 @@ use std::str::FromStr;
 // -------- UPDATE START -------
 const KEYPAIR_PATH: &str = "/your/path";
 
-const QUOTE_TOKEN_ACCOUNT: &str = "BASE58_ADDRESS";
-const WRAPPED_SOL_TOKEN_ACCOUNT: &str = "BASE58_ADDRESS";
-const SRM_TOKEN_ACCOUNT: &str = "BASE58_ADDRESS";
+const WRAPPED_SOL_TOKEN_ACCOUNT: &str = "YOUR_SPL_TOKEN_ACCOUNT_PUBKEY";
+const SRM_TOKEN_ACCOUNT: &str = "YOUR_SPL_TOKEN_ACCOUNT_PUBKEY";
 
-const QUOTE_TOKEN_MINT: &str = "BASE58_ADDRESS";     // USDC: EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
-const SOL_QUOTE_DEX_MARKET: &str = "BASE58_ADDRESS"; // USDC: 9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT
-const SRM_QUOTE_DEX_MARKET: &str = "BASE58_ADDRESS"; // USDC: ByRys5tuUWDgL73G8JBAEfkdFf8JWBzPBDHsBVQ5vbQA
+// MB:  USDC
+// Dev: USDT
+const QUOTE_TOKEN_ACCOUNT: &str = "YOUR_SPL_TOKEN_ACCOUNT_PUBKEY";
 
-solana_program::declare_id!("TokenLend1ng1111111111111111111111111111111");
+// MB:  https://api.mainnet-beta.solana.com
+// Dev: https://devnet.solana.com
+const RPL_URL: &str = "https://devnet.solana.com";
+
+// MB  (USDC): EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+// Dev (USDT): 7KBVenLz5WNH4PA5MdGkJNpDDyNKnBQTwnz1UqJv9GUm
+const QUOTE_TOKEN_MINT: &str = "7KBVenLz5WNH4PA5MdGkJNpDDyNKnBQTwnz1UqJv9GUm";
+
+// MB:  9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT
+// Dev: 8RJA4WhY2Ei48c4xANSgPoqw7DU7mRgvg6eqJS3tvLEN
+const SOL_QUOTE_DEX_MARKET: &str = "8RJA4WhY2Ei48c4xANSgPoqw7DU7mRgvg6eqJS3tvLEN";
+
+// MB:  ByRys5tuUWDgL73G8JBAEfkdFf8JWBzPBDHsBVQ5vbQA
+// Dev: CRLpSnSf7JkoJi9tUnz55R2FoTCrDDkWxQMU6uSVBQgc
+const SRM_QUOTE_DEX_MARKET: &str = "CRLpSnSf7JkoJi9tUnz55R2FoTCrDDkWxQMU6uSVBQgc";
+
+// MB:  LendZqTs7gn5CTSJU1jWKhKuVpjJGom45nnwPb2AMTi
+// Dev: Fo1J5WWXeuD6t8sDXLDDRjrjA8FwB9VizV19CfutRU48
+solana_program::declare_id!("TokenLending1111111111111111111111111111111");
 // -------- UPDATE END ---------
 
 pub struct DexMarket {
@@ -36,7 +53,7 @@ pub struct DexMarket {
 }
 
 pub fn main() {
-    let mut client = RpcClient::new("https://devnet.solana.com".to_owned());
+    let mut client = RpcClient::new(RPC_URL.to_owned());
 
     let payer = read_keypair_file(&format!("{}/payer.json", KEYPAIR_PATH)).unwrap();
 
@@ -202,8 +219,24 @@ pub fn create_reserve(
         .get_minimum_balance_for_rent_exemption(Token::LEN)
         .unwrap();
 
+    println!("Creating reserve with pubkey: {}", reserve_pubkey);
+    println!("Creating reserve collateral mint keypair with pubkey: {}", collateral_mint_keypair.pubkey());
+    println!("Creating reserve collateral supply keypair with pubkey: {}", collateral_supply_keypair.pubkey());
+    println!("Creating reserve collateral fees_receiver keypair with pubkey: {}", collateral_fees_receiver_keypair.pubkey());
+    println!("Creating reserve liquidity supply keypair with pubkey: {}", liquidity_supply_keypair.pubkey());
+    println!("Creating reserve user collateral token keypair with pubkey: {}", user_collateral_token_keypair.pubkey());
+
     let mut transaction = Transaction::new_with_payer(
         &[
+            create_account(
+                &payer.pubkey(),
+                &reserve_pubkey,
+                client
+                    .get_minimum_balance_for_rent_exemption(Reserve::LEN)
+                    .unwrap(),
+                Reserve::LEN as u64,
+                &id(),
+            ),
             create_account(
                 &payer.pubkey(),
                 &collateral_mint_keypair.pubkey(),
@@ -241,15 +274,6 @@ pub fn create_reserve(
                 Token::LEN as u64,
                 &spl_token::id(),
             ),
-            create_account(
-                &payer.pubkey(),
-                &reserve_pubkey,
-                client
-                    .get_minimum_balance_for_rent_exemption(Reserve::LEN)
-                    .unwrap(),
-                Reserve::LEN as u64,
-                &id(),
-            ),
         ],
         Some(&payer.pubkey()),
     );
@@ -260,6 +284,7 @@ pub fn create_reserve(
             &reserve_keypair,
             &collateral_mint_keypair,
             &collateral_supply_keypair,
+            &collateral_fees_receiver_keypair,
             &liquidity_supply_keypair,
             &user_collateral_token_keypair,
         ],
@@ -308,5 +333,6 @@ pub fn create_reserve(
     client.send_and_confirm_transaction(&transaction).unwrap();
 
     let account = client.get_account(&reserve_pubkey).unwrap();
+
     (reserve_pubkey, Reserve::unpack(&account.data).unwrap())
 }
