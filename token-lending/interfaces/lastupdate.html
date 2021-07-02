@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ObligationLiquidity | @solana/spl-token-lending</title>
+	<title>LastUpdate | @solana/spl-token-lending</title>
 	<meta name="description" content="Documentation for @solana/spl-token-lending">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,10 +55,10 @@
 					<a href="../modules.html">@solana/spl-token-lending</a>
 				</li>
 				<li>
-					<a href="obligationliquidity.html">ObligationLiquidity</a>
+					<a href="lastupdate.html">LastUpdate</a>
 				</li>
 			</ul>
-			<h1>Interface ObligationLiquidity</h1>
+			<h1>Interface LastUpdate</h1>
 		</div>
 	</div>
 </header>
@@ -69,7 +69,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ObligationLiquidity</span>
+						<span class="target">LastUpdate</span>
 					</li>
 				</ul>
 			</section>
@@ -80,10 +80,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="obligationliquidity.html#borrowreserve" class="tsd-kind-icon">borrow<wbr>Reserve</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="obligationliquidity.html#borrowedamountwads" class="tsd-kind-icon">borrowed<wbr>Amount<wbr>Wads</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="obligationliquidity.html#cumulativeborrowratewads" class="tsd-kind-icon">cumulative<wbr>Borrow<wbr>Rate<wbr>Wads</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="obligationliquidity.html#marketvalue" class="tsd-kind-icon">market<wbr>Value</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="lastupdate.html#slot" class="tsd-kind-icon">slot</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="lastupdate.html#stale" class="tsd-kind-icon">stale</a></li>
 							</ul>
 						</section>
 					</div>
@@ -92,42 +90,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="borrowreserve" class="tsd-anchor"></a>
-					<h3>borrow<wbr>Reserve</h3>
-					<div class="tsd-signature tsd-kind-icon">borrow<wbr>Reserve<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PublicKey</span></div>
+					<a name="slot" class="tsd-anchor"></a>
+					<h3>slot</h3>
+					<div class="tsd-signature tsd-kind-icon">slot<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">bigint</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/solana-labs/solana-program-library/blob/46f8b97/token-lending/js/src/state/obligation.ts#L27">state/obligation.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/solana-labs/solana-program-library/blob/46f8b97/token-lending/js/src/state/lastUpdate.ts#L5">state/lastUpdate.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="borrowedamountwads" class="tsd-anchor"></a>
-					<h3>borrowed<wbr>Amount<wbr>Wads</h3>
-					<div class="tsd-signature tsd-kind-icon">borrowed<wbr>Amount<wbr>Wads<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigNumber</span></div>
+					<a name="stale" class="tsd-anchor"></a>
+					<h3>stale</h3>
+					<div class="tsd-signature tsd-kind-icon">stale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/solana-labs/solana-program-library/blob/46f8b97/token-lending/js/src/state/obligation.ts#L29">state/obligation.ts:29</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="cumulativeborrowratewads" class="tsd-anchor"></a>
-					<h3>cumulative<wbr>Borrow<wbr>Rate<wbr>Wads</h3>
-					<div class="tsd-signature tsd-kind-icon">cumulative<wbr>Borrow<wbr>Rate<wbr>Wads<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigNumber</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/solana-labs/solana-program-library/blob/46f8b97/token-lending/js/src/state/obligation.ts#L28">state/obligation.ts:28</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="marketvalue" class="tsd-anchor"></a>
-					<h3>market<wbr>Value</h3>
-					<div class="tsd-signature tsd-kind-icon">market<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">BigNumber</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/solana-labs/solana-program-library/blob/46f8b97/token-lending/js/src/state/obligation.ts#L30">state/obligation.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/solana-labs/solana-program-library/blob/46f8b97/token-lending/js/src/state/lastUpdate.ts#L6">state/lastUpdate.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -143,9 +121,21 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface">
 						<a href="lastupdate.html" class="tsd-kind-icon">Last<wbr>Update</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="lastupdate.html#slot" class="tsd-kind-icon">slot</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="lastupdate.html#stale" class="tsd-kind-icon">stale</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="lendingmarket.html" class="tsd-kind-icon">Lending<wbr>Market</a>
 					</li>
@@ -155,27 +145,9 @@
 					<li class=" tsd-kind-interface">
 						<a href="obligationcollateral.html" class="tsd-kind-icon">Obligation<wbr>Collateral</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface">
+					<li class=" tsd-kind-interface">
 						<a href="obligationliquidity.html" class="tsd-kind-icon">Obligation<wbr>Liquidity</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="obligationliquidity.html#borrowreserve" class="tsd-kind-icon">borrow<wbr>Reserve</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="obligationliquidity.html#borrowedamountwads" class="tsd-kind-icon">borrowed<wbr>Amount<wbr>Wads</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="obligationliquidity.html#cumulativeborrowratewads" class="tsd-kind-icon">cumulative<wbr>Borrow<wbr>Rate<wbr>Wads</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="obligationliquidity.html#marketvalue" class="tsd-kind-icon">market<wbr>Value</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface">
 						<a href="reserve.html" class="tsd-kind-icon">Reserve</a>
 					</li>
